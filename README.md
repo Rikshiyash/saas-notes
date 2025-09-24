@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Multi-Tenant SaaS Notes Application
 
-## Getting Started
+This is a multi-tenant notes application built with Next.js, MongoDB, and hosted on Vercel, as per the assignment requirements.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Multi-Tenancy with strict data isolation
+- JWT-based Authentication
+- Role-based Authorization (Admin, Member)
+- Subscription Gating (Free vs. Pro plan)
+- CRUD API for notes
+- Minimalist React Frontend
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Multi-Tenancy Approach
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+This application uses a **shared schema with a `tenantId` column** for multi-tenancy.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Why this approach?** It is the simplest to implement and manage for a small to medium scale application. It avoids the complexity of managing multiple schemas or databases while still providing strong data isolation at the application level.
+- **How it works:** Every major data model (`User`, `Note`) contains a `tenantId` field. All database queries are filtered by the `tenantId` of the currently authenticated user. This ensures that a user can only ever access data belonging to their own tenant. This logic is enforced in the API middleware and controllers.
 
-## Learn More
+## Running Locally
 
-To learn more about Next.js, take a look at the following resources:
+1.  **Clone the repository.**
+2.  **Install dependencies:** `npm install`
+3.  **Set up environment variables:** Create a `.env.local` file in the root and add your `MONGODB_URI` and `JWT_SECRET`.
+4.  **Seed the database:** Run the dev server (`npm run dev`) and visit `http://localhost:3000/api/seed` in your browser one time.
+5.  **Start the application:** `npm run dev`. The app will be available at `http://localhost:3000`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## API Endpoints
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `GET /api/health`: Health check.
+- `POST /api/auth/login`: User login.
+- `POST /api/notes`: Create a note.
+- `GET /api/notes`: List all notes for the current tenant.
+- `DELETE /api/notes/:id`: Delete a specific note.
+- `POST /api/tenants/:slug/upgrade`: (Admin only) Upgrade tenant subscription to Pro.
 
-## Deploy on Vercel
+## Test Accounts
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The password for all accounts is `password`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `admin@acme.test` (Admin, Tenant: Acme)
+- `user@acme.test` (Member, Tenant: Acme)
+- `admin@globex.test` (Admin, Tenant: Globex)
+- `user@globex.test` (Member, Tenant: Globex)
