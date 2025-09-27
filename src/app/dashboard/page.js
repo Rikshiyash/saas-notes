@@ -1,4 +1,3 @@
-// src/app/dashboard/page.js
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -139,14 +138,14 @@ export default function DashboardPage() {
                                 placeholder="Note Title"
                                 value={newNote.title}
                                 onChange={(e) => setNewNote({ ...newNote, title: e.target.value })}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 text-black placeholder-black"
                                 required
                             />
                             <textarea
                                 placeholder="Note Content"
                                 value={newNote.content}
                                 onChange={(e) => setNewNote({ ...newNote, content: e.target.value })}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 text-black placeholder-black"
                                 rows="3"
                                 required
                             ></textarea>
@@ -167,8 +166,8 @@ export default function DashboardPage() {
                         notes.map(note => (
                             <div key={note._id} className="flex items-center justify-between p-4 bg-white rounded-lg shadow">
                                 <div>
-                                    <h3 className="font-bold text-gray-900">{note.title}</h3>
-                                    <p className="text-gray-600">{note.content}</p>
+                                    <h3 className="font-bold text-black">{note.title}</h3>
+                                    <p className="text-black">{note.content}</p>
                                 </div>
                                 <button onClick={() => handleDeleteNote(note._id)} className="px-3 py-1 text-sm font-medium text-red-600 bg-red-100 rounded-md hover:bg-red-200">Delete</button>
                             </div>
